@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Controller;
 
 import entitys.Flight;
 import entitys.Plane;
@@ -15,29 +17,12 @@ import exceptions.TravelerAlreadyExistsException;
 import exceptions.TravelerNotFoundException;
 import service.TravelerService;
 
+@Controller
 public class AirportCLI {
-	public static Scanner sc = new Scanner(System.in);  // Create a Scanner object
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		//show flight
-		//show traveler
-		//add traveler
-		//update traveler
-		//delete traveler
-		//exit
-		// Load the Spring configuration file
+	@Autowired
+	private TravelerService service;
+	
 
-		
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-		
-		TravelerService service = (TravelerService)context.getBean("travelerService");
-		//start
-		
-		while(printAllDestinations(service)){}
-		
-		//end
-		context.close();
-	}
 
 	public static boolean actions(int decision,TravelerService service,Flight dest) {
 		switch(decision) {
