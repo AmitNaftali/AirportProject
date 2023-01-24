@@ -21,6 +21,8 @@ import service.TravelerService;
 public class AirportCLI {
 	@Autowired
 	private TravelerService service;
+	
+
 
 	public static boolean actions(int decision,TravelerService service,Flight dest) {
 		switch(decision) {
