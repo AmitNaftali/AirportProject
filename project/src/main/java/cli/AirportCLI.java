@@ -26,7 +26,7 @@ public class AirportCLI {
 		//delete traveler
 		//exit
 		// Load the Spring configuration file
-		//aSDFASDASDASD
+		//aSDFASDASDASDASD
 		
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		
