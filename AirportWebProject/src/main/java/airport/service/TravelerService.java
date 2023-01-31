@@ -9,9 +9,9 @@ import javax.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import airport.dal.FileDao;
-import airport.entitys.Airport;
-import airport.entitys.Flight;
-import airport.entitys.Traveler;
+import airport.entities.Airport;
+import airport.entities.Flight;
+import airport.entities.Traveler;
 import airport.exceptions.FlightAlreadyExistException;
 import airport.exceptions.FlightNotFoundException;
 import airport.exceptions.FullAirportException;
