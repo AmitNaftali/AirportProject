@@ -2,9 +2,11 @@ package airport.dal;
 
 import java.util.List;
 
-import airport.entitys.Flight;
+import org.springframework.stereotype.Component;
 
+import airport.entities.Flight;
 
+@Component
 public interface FileDao {
 	public List<Flight> getAll() throws Exception;
 	public void save(Flight a) throws Exception;

@@ -6,12 +6,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
-import airport.entitys.Airport;
-import airport.entitys.Flight;
+import org.springframework.stereotype.Component;
+
+import airport.entities.Airport;
+import airport.entities.Flight;
 
 
 
-
+@Component
 public class AirportFileDao implements FileDao{
 
 	@Override
