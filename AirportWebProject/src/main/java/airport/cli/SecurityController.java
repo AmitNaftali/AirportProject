@@ -36,7 +36,7 @@ public class SecurityController {
 		return "redirect:/?incorrect=true";
 	}
 
-	@RequestMapping("/showMainScreen")
+	/*@RequestMapping("/showMainScreen")
 	public String showMainScreen(HttpServletRequest request) {
 		
 		if(request.getSession().getAttribute("user") == null)
@@ -44,6 +44,6 @@ public class SecurityController {
 			return "redirect:/";
 		
 		return "main-screen"; // change to our main page
-	}
+	}*/
 
 }
