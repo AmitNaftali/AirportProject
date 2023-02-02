@@ -1,5 +1,6 @@
 package airport.dal;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -7,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
 
 import airport.entities.Airport;
 import airport.entities.Flight;
@@ -60,26 +62,24 @@ public class AirportFileDao implements FileDao{
 
 	private void serialize() throws Exception
 	{
-		 String filename = "./airport.dat";  
-        //Saving of object in a file
-        FileOutputStream file = new FileOutputStream(filename);
-        ObjectOutputStream out = new ObjectOutputStream(file);
+		File file = ResourceUtils.getFile("classpath:airport.dat");
+		FileOutputStream fileOut = new FileOutputStream(file);
+        ObjectOutputStream out = new ObjectOutputStream(fileOut);
         // Method for serialization of object
         out.writeObject(Airport.getInstance());
         out.close();
-        file.close();   
+        fileOut.close();   
 	}
 	private void deserialize() throws Exception
 	{
 		// Add the student object as a model attribute
 		// Deserialization
-		String filename = "./airport.dat"; 
-        // Reading the object from a file
-        FileInputStream file = new FileInputStream(filename);
-        ObjectInputStream in = new ObjectInputStream(file);
+		File file = ResourceUtils.getFile("classpath:airport.dat");
+		FileInputStream fileInput = new FileInputStream(file);
+        ObjectInputStream in = new ObjectInputStream(fileInput);
         // Method for deserialization of object
         Airport.setAirport((Airport)in.readObject());
         in.close();
-        file.close();
+        fileInput.close();
 	}	
 }
