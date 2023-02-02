@@ -47,7 +47,7 @@ public class AirportController {
 	
     
     @RequestMapping("/proccessActions")
-    public String processAction(@RequestParam("flight")String id,HttpServletRequest request) {
+    public String processAction(@RequestParam("flight")String id,HttpServletRequest request,Model model) {
     	int decision = 0;
     	String option = request.getParameter("option");
     	if(option.equals("Add to flight"))
@@ -61,11 +61,13 @@ public class AirportController {
     	if(option.equals("Log out"))
     		decision = 0;
     	User user = (User)request.getSession().getAttribute("user");
-    	return actions(decision,user,Integer.parseInt(id));
+    	return actions(decision,user,Integer.parseInt(id),model);
     }
     
-    public String actions(int decision,User user,int destId){
-    	Traveler t = new Traveler(Integer.parseInt(user.getPassword()),user.getUsername());
+    public String actions(int decision,User user,int destId,Model model){
+    	//Traveler t = new Traveler(Integer.parseInt(user.getPassword()),user.getUsername());
+    	Traveler t = new Traveler(1,"1");
+    	model.addAttribute("action",decision);
     	switch(decision) {
         case 1:
             try {
@@ -101,7 +103,7 @@ public class AirportController {
         	return "redirect:/showMainScreen";
         case 0:
             System.out.println("Exited.");
-            return "log_out";//logout page
+            return "result";//logout page
         }
         return "";
     }
