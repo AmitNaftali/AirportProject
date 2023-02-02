@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import airport.dal.FileDao;
 import airport.entities.Airport;
 import airport.entities.Flight;
+import airport.entities.Plane;
 import airport.entities.Traveler;
 import airport.exceptions.FlightAlreadyExistException;
 import airport.exceptions.FlightNotFoundException;
@@ -133,6 +134,10 @@ public class TravelerService {
 	@PostConstruct
 	public void containerStartUp()  throws Exception{
 		getAll();
+		/*Flight f1 = new Flight(1, 12, 15, new Plane("737",25), "japan");
+		dependency.save(f1);
+		Flight f2 = new Flight(2, 13, 16, new Plane("737",30), "japan");
+		dependency.save(f2);*/
 		System.out.println(Airport.getInstance());
 	}
 
@@ -159,14 +164,14 @@ public class TravelerService {
 	public void setMaxDestinations(int maxDestinations) {
 		this.maxDestinations = maxDestinations;
 	}
-	public List<Flight> getTravelerFlights(Traveler traveler,String dest) throws Exception{
+	public List<Flight> getTravelerFlights(Traveler traveler,int destId) throws Exception{
 		ArrayList<Flight> flights = new ArrayList<Flight>();
 		for(Flight flight : dependency.getAll()) {
-			if(flight.getDestination().equals(dest) && flight.getTravelers().contains(traveler))
+			if(flight.getId() == destId && flight.getTravelers().contains(traveler))
 				flights.add(flight);
 		}
 		if(flights.isEmpty())
-			throw new TravelerNotFoundException("could not found traveler" + traveler + " in flights to " + dest + "!");
+			throw new TravelerNotFoundException("could not found traveler" + traveler + " in with id flights to " + destId + "!");
 		return flights;
 	}
 }

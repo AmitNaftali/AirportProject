@@ -9,7 +9,8 @@ public class Flight implements Comparable<Flight>, Serializable {
 	private double landingTime;
 	private Plane plane;
 	private String destination;
-
+	
+	public Flight() {}
 	public Flight(int id,double departureTime, double landingTime, Plane p, String destination) {
 		this.id = id;
 		this.departureTime = departureTime;
