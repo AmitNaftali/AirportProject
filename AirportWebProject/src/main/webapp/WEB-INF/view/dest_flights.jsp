@@ -5,10 +5,65 @@
 <html>
 <head>
 <title>Flights</title>
+
+<style>
+@import
+	url('https://fonts.googleapis.com/css2?family=Copperplate&display=swap%27%27')
+	;
+
+form {
+	width: 600px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+body {
+	font-family: 'Copperplate', sans-serif;
+} /* sets font of everything under body tag*/
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+th, td {
+	border: 1px solid #ddd;
+	padding: 8px;
+	text-align: left;
+}
+
+th {
+	background-color: #c0d4ff;
+}
+
+tr:hover {
+	background-color: #f5d4ff;
+}
+
+/
+creates the blue hovering row in the table* /
+
+  input[type="submit"] {
+	padding: 10px 20px;
+	border-radius: 5px;
+	background-color: #c0d4ff;
+	color: white;
+	border: none;
+	cursor: pointer;
+	margin-top: 20px;
+}
+</style>
+
+
+
 </head>
 <body>
-	<form:form action="actions">
-		<table style="width: 100%">
+	<form:form action="proccessActions">
+		<input type="submit" name="option" value="Add to flight" />
+		<input type="submit" name="option" value="Remove from flight" />
+		<input type="submit" name="option" value="Show your flights" />
+		<input type="submit" name="option" value="Show all flights" />
+		<input type="submit" name="option" value="Log out" />
+		<table style="width: 1500" align="center">
 			<tr>
 				<th>flight</th>
 				<th>departureTime</th>
@@ -21,11 +76,14 @@
 					<td>${destenation.departureTime}</td>
 					<td>${destenation.landingTime}</td>
 					<td>${destenation.destination}</td>
-					<td><input type="radio" name="flight" value= "${destenation}"/></td>
+					<c:forEach items="${destenation.travelers}" var="traveler">
+						<c:out value="${traveler.passportId}" />
+						<c:out value="${traveler.fullName}" />
+					</c:forEach>
+					<td><input type="radio" name="flight" value="${destenation.id}"/></td>
 				</tr>
 			</c:forEach>
 		</table>
-		<input type="submit" value="Select" />
 	</form:form>
 </body>
 </html>

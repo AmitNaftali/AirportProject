@@ -164,14 +164,14 @@ public class TravelerService {
 	public void setMaxDestinations(int maxDestinations) {
 		this.maxDestinations = maxDestinations;
 	}
-	public List<Flight> getTravelerFlights(Traveler traveler,String dest) throws Exception{
+	public List<Flight> getTravelerFlights(Traveler traveler,int destId) throws Exception{
 		ArrayList<Flight> flights = new ArrayList<Flight>();
 		for(Flight flight : dependency.getAll()) {
-			if(flight.getDestination().equals(dest) && flight.getTravelers().contains(traveler))
+			if(flight.getId() == destId && flight.getTravelers().contains(traveler))
 				flights.add(flight);
 		}
 		if(flights.isEmpty())
-			throw new TravelerNotFoundException("could not found traveler" + traveler + " in flights to " + dest + "!");
+			throw new TravelerNotFoundException("could not found traveler" + traveler + " in with id flights to " + destId + "!");
 		return flights;
 	}
 }

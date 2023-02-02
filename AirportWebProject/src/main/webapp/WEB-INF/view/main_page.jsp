@@ -1,47 +1,57 @@
-
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <!DOCTYPE html>
 <html>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Copperplate&display=swap%27');
+@import
+    url('https://fonts.googleapis.com/css2?family=Copperplate&display=swap%27%27')
+    ;
 
-body {font-family: 'Copperplate', sans-serif;} /* sets font of everything under body tag/
+ form {
+    width: 600px;
+    margin: 0 auto;
+    text-align: center;
+  }
 
-table, th, td {border: 1px solid black;}
-
-table{  border-collapse: collapse; table-layout:fixed;}  /collapses the inside borders in the table/
-
-td {width:1px;white-space:nowrap;}
-
-th { background-color: #c0d4ff; color: white;} /sets the color of the header row in the table/
-
-tr:hover {background-color: #f5d4ff;} /creates the blue hovering row in the table*/
+  body {
+    font-family: 'Copperplate', sans-serif;} /* sets font of everything under body tag*/
 
 
-form input[type="submit"] {
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #c0d4ff;
+  }
+
+  tr:hover {background-color: #f5d4ff;} /creates the blue hovering row in the table*/
+
+  input[type="submit"] {
     padding: 10px 20px;
-    border-radius: 50px;
-    background-color: lightblue;
-    border: none;
+    border-radius: 5px;
+    background-color: #c0d4ff;
     color: white;
-    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+  }
 
-        height: 8vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-family: 'Copperplate', sans-serif;
-}
 </style>
 <head>
 <title>Flights</title>
 </head>
 <body>
     <form:form action="showFlightsToDestination">
-        <table style="width: 100%">
+        <table style="width: 1000" align="center">
             <tr>
                 <th>destenation</th>
                 <th>choise</th>
