@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import airport.entities.Flight;
 import airport.entities.Traveler;
+import airport.exceptions.FlightNotFoundException;
+import airport.exceptions.FullFlightException;
+import airport.exceptions.TravelerAlreadyExistsException;
+import airport.exceptions.TravelerNotFoundException;
 import airport.service.TravelerService;
 
 @Controller
@@ -37,76 +41,86 @@ public class AirportController {
 		String flightName = request.getParameter("chosenFlight");
 		try {
 			List<Flight> destenations = service.showFlightsToDestinations(flightName);
-			model.addAttribute("flightDestenations",destenations);
+			model.addAttribute("flightDestenations", destenations);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return "dest_flights"; // show all flights to selected destination
 	}
-	
-    
-    @RequestMapping("/proccessActions")
-    public String processAction(@RequestParam("flight")String id,HttpServletRequest request,Model model) {
-    	int decision = 0;
-    	String option = request.getParameter("option");
-    	if(option.equals("Add to flight"))
-    		decision = 1;
-    	if(option.equals("Remove from flight"))
-    		decision = 2;
-    	if(option.equals("Show your flights"))
-    		decision = 3;
-    	if(option.equals("Show all flights"))
-    		decision = 4;
-    	if(option.equals("Log out"))
-    		decision = 0;
-    	User user = (User)request.getSession().getAttribute("user");
-    	return actions(decision,user,Integer.parseInt(id),model);
-    }
-    
-    public String actions(int decision,User user,int destId,Model model){
-    	//Traveler t = new Traveler(Integer.parseInt(user.getPassword()),user.getUsername());
-    	Traveler t = new Traveler(1,"1");
-    	model.addAttribute("action",decision);
-    	switch(decision) {
-        case 1:
-            try {
+
+	@RequestMapping("/proccessActions")
+	public String processAction(@RequestParam("flight") String id, HttpServletRequest request, Model model) {
+		int decision = 0;
+		String option = request.getParameter("option");
+		if (option.equals("Add to flight"))
+			decision = 1;
+		if (option.equals("Remove from flight"))
+			decision = 2;
+		if (option.equals("Show your flights"))
+			decision = 3;
+		if (option.equals("Show all flights"))
+			decision = 4;
+		if (option.equals("Log out"))
+			decision = 0;
+		User user = (User) request.getSession().getAttribute("user");
+		return actions(decision, user, Integer.parseInt(id), model);
+	}
+
+	public String actions(int decision, User user, int destId, Model model) {
+		// Traveler t = new
+		// Traveler(Integer.parseInt(user.getPassword()),user.getUsername());
+		Traveler t = new Traveler(1, "1");
+		model.addAttribute("action", decision);
+		switch (decision) {
+		case 1:
+
+			try {
 				service.addTravelerToFlight(destId, t);
+			} catch (FullFlightException ffe) {
+
+			} catch (TravelerAlreadyExistsException taee) {
+
+			} catch (FlightNotFoundException fnfe) {
+
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-				
-				return ""; // errors
+
+				return "";
 			}
-            return "";//add page
-        case 2:
-            try {
+		case 2:
+
+			try {
 				service.removeTravelerFromFlight(destId, t);
+			} catch (TravelerNotFoundException tnfe) {
+
+			} catch (FlightNotFoundException fnfe) {
+
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-				
-				return ""; // errors
+
+				return "";
 			}
-            return"";//del page
-        case 3:
-        	try {
+		case 3:
+
+			try {
 				service.getTravelerFlights(t, destId);
+			} catch (TravelerNotFoundException tnfe) {
+
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-				
+
 				return ""; // errors
 			}
-            return "" ;//show traveler flights
-        case 4:
-        	return "redirect:/showMainScreen";
-        case 0:
-            System.out.println("Exited.");
-            return "result";//logout page
-        }
-        return "";
-    }
-	
-	
+
+		case 4:
+			return "redirect:/showMainScreen";
+
+		case 0:
+			System.out.println("Exited.");
+			return "result";
+		}
+		return "";
+	}
+
 }
