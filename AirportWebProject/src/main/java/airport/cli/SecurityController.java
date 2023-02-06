@@ -19,7 +19,7 @@ public class SecurityController {
 
 		String param = request.getParameter("incorrect");
 		if(param != null)
-			model.addAttribute("message", "Username or password is inncorrect, please try again");
+			model.addAttribute("message", "Username and password are empty or password contains characters, please try again");
 
 		return "login-page";
 	}
@@ -28,12 +28,23 @@ public class SecurityController {
 	public String processLogin(@ModelAttribute("user") User user, HttpServletRequest request) {
 		System.out.println(user);
 
-		if (user.getPassword().equals("abc")) {
+		if (user.getPassword().length() > 0 && user.getUsername().length() > 0 && checkPassword(user.getPassword())) {
 			// create session and put user object on session
 			request.getSession().setAttribute("user", user);
 			return "redirect:/showMainScreen";
 		}		
 		return "redirect:/?incorrect=true";
+	}
+	private boolean checkPassword(String password)
+	{
+		try {
+			int check = Integer.parseInt(password);
+			return true;
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
 	}
 
 	/*@RequestMapping("/showMainScreen")

@@ -26,9 +26,9 @@ import airport.exceptions.TravelerNotFoundException;
 public class TravelerService {
 	@Autowired
 	private FileDao dependency;
-	private int maxTravelers;
-    private int maxFlights;
-    private int maxDestinations;
+	private int maxTravelers = 30;
+    private int maxFlights = 30;
+    private int maxDestinations = 10;
 	
 	public List<Flight> getAll() throws Exception {
 		return dependency.getAll();

@@ -68,6 +68,7 @@ creates the blue hovering row in the table* /
 				<th>flight</th>
 				<th>departureTime</th>
 				<th>landingTime</th>
+				<th>travelers</th>
 				<th>choise</th>
 			</tr>
 			<c:forEach items="${flightDestenations}" var="destenation">
@@ -75,11 +76,12 @@ creates the blue hovering row in the table* /
 					<td>${destenation.id}</td>
 					<td>${destenation.departureTime}</td>
 					<td>${destenation.landingTime}</td>
-					<td>${destenation.destination}</td>
+					<td>
 					<c:forEach items="${destenation.travelers}" var="traveler">
-						<c:out value="${traveler.passportId}" />
-						<c:out value="${traveler.fullName}" />
+						<p>id: ${traveler.passportId}</p>
+						<p>name: ${traveler.fullName}</p>
 					</c:forEach>
+					</td>
 					<td><input type="radio" name="flight" value="${destenation.id}"/></td>
 				</tr>
 			</c:forEach>

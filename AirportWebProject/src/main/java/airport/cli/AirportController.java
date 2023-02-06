@@ -68,59 +68,58 @@ public class AirportController {
 	}
 
 	public String actions(int decision, User user, int destId, Model model) {
-		// Traveler t = new
 		// Traveler(Integer.parseInt(user.getPassword()),user.getUsername());
 		Traveler t = new Traveler(1, "1");
 		model.addAttribute("action", decision);
 		switch (decision) {
 		case 1:
-
 			try {
 				service.addTravelerToFlight(destId, t);
+				// picture of destination
+				model.addAttribute("addFlight",service.get(destId));
 			} catch (FullFlightException ffe) {
-
+				model.addAttribute("exception", ffe.getMessage());
 			} catch (TravelerAlreadyExistsException taee) {
-
+				model.addAttribute("exception", taee.getMessage());
 			} catch (FlightNotFoundException fnfe) {
-
+				model.addAttribute("exception", fnfe.getMessage());
 			} catch (Exception e) {
 				e.printStackTrace();
-
-				return "";
 			}
+			break;
 		case 2:
 
 			try {
 				service.removeTravelerFromFlight(destId, t);
+				// picture of destination with disappointed message
+				model.addAttribute("removeFlight",service.get(destId));
 			} catch (TravelerNotFoundException tnfe) {
-
+				model.addAttribute("exception", tnfe.getMessage());
 			} catch (FlightNotFoundException fnfe) {
-
+				model.addAttribute("exception", fnfe.getMessage());
 			} catch (Exception e) {
 				e.printStackTrace();
-
-				return "";
 			}
+			break;
 		case 3:
 
 			try {
-				service.getTravelerFlights(t, destId);
+				List<Flight> travelerFlights = service.getTravelerFlights(t, destId);
+				model.addAttribute("travelerFlights",travelerFlights);
 			} catch (TravelerNotFoundException tnfe) {
-
+				model.addAttribute("exception", tnfe.getMessage());
 			} catch (Exception e) {
 				e.printStackTrace();
-
-				return ""; // errors
 			}
-
+			break;
 		case 4:
 			return "redirect:/showMainScreen";
 
 		case 0:
 			System.out.println("Exited.");
-			return "result";
+			break;
 		}
-		return "";
+		return "result";
 	}
 
 }
