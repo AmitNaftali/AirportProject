@@ -6,7 +6,7 @@
 
 <style>
 @import
-    url('https://fonts.googleapis.com/css2?family=Copperplate&display=swap%2%27')
+    url('https://fonts.googleapis.com/css2?family=Copperplate&display=swap%2%27%27')
     ;
 
 body {
@@ -17,7 +17,10 @@ body {
     font-family: 'Copperplate', sans-serif;
     font-size: 18px;
     line-height: 1.5;
-
+    background-image:
+        url("${pageContext.request.contextPath}/resources/imgs/backroundAirport.jpg");
+    background-size: 100%;
+    background-repeat: no-repeat;
 }
 
 form {
@@ -43,6 +46,7 @@ form input[type="submit"] {
     color: white;
     border: none;
     cursor: pointer;
+    margin-top: 10px;
 }
 
 .message {
@@ -51,14 +55,19 @@ form input[type="submit"] {
     margin-top: 20px;
 }
 
-
-
+.container {
+    background-image:
+        url(${pageContext.request.contextPath}/resources/imgs/backroundAirport.jpg);
+    background-size : cover; background-position : center;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
 </style>
 
 </head>
 <body>
 
-<p style="background-image: url('/resources/images/back.jpg');">
 
 
     <form:form action="processLogin" modelAttribute="user">

@@ -28,9 +28,8 @@ public class AirportController {
 		try {
 			List<String> destenations = service.getDestinations();
 			model.addAttribute("destenations", destenations);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		}catch (Exception e) {//user didnt select flight
+			return "redirect:showMainScreen";
 		}
 		return "main_page"; // show destenation flights
 	}
@@ -39,10 +38,17 @@ public class AirportController {
 	public String showFlightsToDestination(Model model, HttpServletRequest request) {
 
 		String flightName = request.getParameter("chosenFlight");
+		request.getSession().setAttribute("destFlight", flightName);
 		try {
+			List<String> dests = service.getDestinations();
+			model.addAttribute("destenations", dests);
 			List<Flight> destenations = service.showFlightsToDestinations(flightName);
 			model.addAttribute("flightDestenations", destenations);
-		} catch (Exception e) {
+			}catch(FlightNotFoundException fnfe){
+			model.addAttribute("flightNfound2","please select a flight to continue");
+			return "main_page";
+		}
+		catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -50,9 +56,10 @@ public class AirportController {
 	}
 
 	@RequestMapping("/proccessActions")
-	public String processAction(@RequestParam("flight") String id, HttpServletRequest request, Model model) {
-		int decision = 0;
+	public String processAction(@RequestParam(value="flight",required=false) String id, HttpServletRequest request, Model model) {
+		System.out.println(id);
 		String option = request.getParameter("option");
+		int decision = 0;
 		if (option.equals("Add to flight"))
 			decision = 1;
 		if (option.equals("Remove from flight"))
@@ -63,6 +70,18 @@ public class AirportController {
 			decision = 4;
 		if (option.equals("Log out"))
 			decision = 0;
+		if(id == null)
+		{
+			try {
+				List<Flight> dests = service.showFlightsToDestinations((String)request.getSession().getAttribute("destFlight"));
+				model.addAttribute("flightDestenations", dests);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return "redirect:showMainScreen";
+			}
+			model.addAttribute("flightNfound1", "please select a flight for this action");
+			return "dest_flights";
+		}
 		User user = (User) request.getSession().getAttribute("user");
 		return actions(decision, user, Integer.parseInt(id), model);
 	}
@@ -70,7 +89,6 @@ public class AirportController {
 	public String actions(int decision, User user, int destId, Model model) {
 		// Traveler(Integer.parseInt(user.getPassword()),user.getUsername());
 		Traveler t = new Traveler(1, "1");
-		model.addAttribute("action", decision);
 		switch (decision) {
 		case 1:
 			try {
@@ -79,10 +97,13 @@ public class AirportController {
 				model.addAttribute("addFlight",service.get(destId));
 			} catch (FullFlightException ffe) {
 				model.addAttribute("exception", ffe.getMessage());
+				decision = 5;
 			} catch (TravelerAlreadyExistsException taee) {
 				model.addAttribute("exception", taee.getMessage());
+				decision = 5;
 			} catch (FlightNotFoundException fnfe) {
 				model.addAttribute("exception", fnfe.getMessage());
+				decision = 5;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -95,8 +116,10 @@ public class AirportController {
 				model.addAttribute("removeFlight",service.get(destId));
 			} catch (TravelerNotFoundException tnfe) {
 				model.addAttribute("exception", tnfe.getMessage());
+				decision = 5;
 			} catch (FlightNotFoundException fnfe) {
 				model.addAttribute("exception", fnfe.getMessage());
+				decision = 5;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -108,6 +131,7 @@ public class AirportController {
 				model.addAttribute("travelerFlights",travelerFlights);
 			} catch (TravelerNotFoundException tnfe) {
 				model.addAttribute("exception", tnfe.getMessage());
+				decision = 5;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -119,6 +143,7 @@ public class AirportController {
 			System.out.println("Exited.");
 			break;
 		}
+		model.addAttribute("action", decision);
 		return "result";
 	}
 

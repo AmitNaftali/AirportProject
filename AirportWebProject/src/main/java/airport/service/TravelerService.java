@@ -31,6 +31,24 @@ public class TravelerService {
     private int maxDestinations = 10;
 	
 	public List<Flight> getAll() throws Exception {
+		/*Flight f1 = new Flight(1, 13, 22, new Plane("707",35), "Japan");
+		dependency.save(f1);
+		Flight f2 = new Flight(2, 20, 16, new Plane("747",30), "Japan");
+		dependency.save(f2);
+		Flight f3 = new Flight(3, 13, 20, new Plane("757",28), "New York");
+		dependency.save(f3);
+		Flight f4 = new Flight(4, 20, 22, new Plane("737",30), "Paris");
+		dependency.save(f4);
+		Flight f5 = new Flight(5, 21, 23, new Plane("727",22), "New York");
+		dependency.save(f5);
+		Flight f6 = new Flight(6, 9, 16, new Plane("717",30), "Paris");
+		dependency.save(f6);*/
+		/*dependency.delete(1);
+		dependency.delete(2);
+		dependency.delete(3);
+		dependency.delete(4);
+		dependency.delete(5);
+		dependency.delete(6);*/
 		return dependency.getAll();
 	}
 
@@ -134,10 +152,24 @@ public class TravelerService {
 	@PostConstruct
 	public void containerStartUp()  throws Exception{
 		getAll();
-		/*Flight f1 = new Flight(1, 12, 15, new Plane("737",25), "japan");
+		/*Flight f1 = new Flight(1, 13, 22, new Plane("707",35), "Japan");
 		dependency.save(f1);
-		Flight f2 = new Flight(2, 13, 16, new Plane("737",30), "japan");
-		dependency.save(f2);*/
+		Flight f2 = new Flight(2, 20, 16, new Plane("747",30), "Japan");
+		dependency.save(f2);
+		Flight f3 = new Flight(3, 13, 20, new Plane("757",28), "New York");
+		dependency.save(f3);
+		Flight f4 = new Flight(4, 20, 22, new Plane("737",30), "Paris");
+		dependency.save(f4);
+		Flight f5 = new Flight(5, 21, 23, new Plane("727",22), "New York");
+		dependency.save(f5);
+		Flight f6 = new Flight(6, 9, 16, new Plane("717",30), "Paris");
+		dependency.save(f6);*/
+		/*dependency.delete(1);
+		dependency.delete(2);
+		dependency.delete(3);
+		dependency.delete(4);
+		dependency.delete(5);
+		dependency.delete(6);*/
 		System.out.println(Airport.getInstance());
 	}
 

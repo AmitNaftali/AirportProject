@@ -5,52 +5,61 @@
 <html>
 <style>
 @import
-    url('https://fonts.googleapis.com/css2?family=Copperplate&display=swap%27%27')
+    url('https://fonts.googleapis.com/css2?family=Copperplate&display=swap%27%27%27%27')
     ;
 
- form {
+form {
     width: 600px;
     margin: 0 auto;
     text-align: center;
-  }
+}
 
-  body {
-    font-family: 'Copperplate', sans-serif;} /* sets font of everything under body tag*/
+body {
+    font-family: 'Copperplate', sans-serif;
+    background-image:
+        url("${pageContext.request.contextPath}/resources/imgs/backroundAirport.jpg");
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
 
-
-  table {
+} /* sets font of everything under body tag*/
+table {
     width: 100%;
     border-collapse: collapse;
-  }
+}
 
-  th, td {
+th, td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
-  }
+}
 
-  th {
+th {
     background-color: #c0d4ff;
-  }
+}
 
-  tr:hover {background-color: #f5d4ff;} /creates the blue hovering row in the table*/
+tr:hover {
+    background-color: #f5d4ff;
+}
 
-  input[type="submit"] {
-    padding: 10px 20px;
+input[type="submit"] {
+    width: 23%;
+    padding: 10px;
     border-radius: 5px;
     background-color: #c0d4ff;
     color: white;
     border: none;
     cursor: pointer;
-    margin-top: 20px;
-  }
-
+    margin-right: 10px;
+    margin-top: 10px;
+}
 </style>
 <head>
 <title>Flights</title>
 </head>
 <body>
     <form:form action="showFlightsToDestination">
+    <p>${flightNfound2}</p>
         <table style="width: 1000" align="center">
             <tr>
                 <th>destenation</th>
