@@ -70,6 +70,11 @@ public class AirportController {
 			decision = 4;
 		if (option.equals("Log out"))
 			decision = 0;
+		User user = (User) request.getSession().getAttribute("user");
+		if(decision == 3 || decision == 4)
+		{
+			return actions(decision,user,0,model);// 0 for invalid id
+		}
 		if(id == null)
 		{
 			try {
@@ -82,7 +87,6 @@ public class AirportController {
 			model.addAttribute("flightNfound1", "please select a flight for this action");
 			return "dest_flights";
 		}
-		User user = (User) request.getSession().getAttribute("user");
 		return actions(decision, user, Integer.parseInt(id), model);
 	}
 
