@@ -2,59 +2,89 @@ package airport.cli;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import airport.entities.Traveler;
+import airport.service.TravelerService;
+
 @Controller
 public class SecurityController {
-
+	@Autowired
+	private TravelerService service;
+	
 	@RequestMapping("/")
 	public String showLoginForm(Model model, HttpServletRequest request) {
-		User user = new User();
+		Traveler user = new Traveler();
 
 		// Add the user object as a model attribute
 		model.addAttribute("user", user);
 
 		String param = request.getParameter("incorrect");
 		if(param != null)
-			model.addAttribute("message", "Username and password are empty or password contains characters, please try again");
+			model.addAttribute("message", "incorrect username, please try again");
 
 		return "login-page";
 	}
 
 	@RequestMapping("/processLogin")
-	public String processLogin(@ModelAttribute("user") User user, HttpServletRequest request) {
+	public String processLogin(@ModelAttribute("user")Traveler user, HttpServletRequest request) {
 		System.out.println(user);
-
-		if (user.getPassword().length() > 0 && user.getUsername().length() > 0 && checkPassword(user.getPassword())) {
-			// create session and put user object on session
-			request.getSession().setAttribute("user", user);
-			return "redirect:/showMainScreen";
+		// minimum 3 characters long
+		if (user.getFullName().length() >= 3)
+		{
+			try { // check if user exist already
+				Traveler t = service.findTraveler(user.getFullName());
+				service.setTraveler(t);
+				return "redirect:/showMainScreen";
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				return "redirect:/?incorrect=true";
+			}
 		}		
 		return "redirect:/?incorrect=true";
 	}
-	private boolean checkPassword(String password)
-	{
-		try {
-			int check = Integer.parseInt(password);
-			return true;
-		}
-		catch(Exception e)
-		{
-			return false;
-		}
+	
+	@RequestMapping("/register")
+	public String showRegisterForm(Model model, HttpServletRequest request) {
+		Traveler user = new Traveler();
+
+		// Add the user object as a model attribute
+		model.addAttribute("user", user);
+
+		String param = request.getParameter("incorrect");
+		if(param != null)
+			model.addAttribute("message", "username already exist, please try again");
+
+		return "register";
 	}
 
-	/*@RequestMapping("/showMainScreen")
-	public String showMainScreen(HttpServletRequest request) {
-		
-		if(request.getSession().getAttribute("user") == null)
-			// user has no data on session
-			return "redirect:/";
-		
-		return "main-screen"; // change to our main page
-	}*/
-
+	@RequestMapping("/processRegister")
+	public String processRegister(@ModelAttribute("user")Traveler user, HttpServletRequest request) {
+		System.out.println(user);
+		// minimum 3 characters long
+		if (user.getFullName().length() >= 3)
+		{
+			try { // check if user exist already
+				service.setTraveler(service.findTraveler(user.getFullName()));
+				return "redirect:/register?incorrect=true";
+			}catch(Exception e)
+			{
+				try {
+					service.saveTraveler(user);
+					service.setTraveler(user);	
+					return "redirect:/showMainScreen";
+				}catch(Exception e2)
+				{
+					e2.printStackTrace();
+				}
+			}
+		}		
+		return "redirect:/register?incorrect=true";
+	}
 }

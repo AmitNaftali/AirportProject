@@ -64,6 +64,9 @@ input[type="submit"] {
     margin-right: 10px;
     margin-top: 10px;
 }
+input[type="submit"]:hover{
+    background-color: #6e8bf0;
+}
 </style>
 
 

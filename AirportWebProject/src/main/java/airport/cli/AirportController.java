@@ -26,6 +26,7 @@ public class AirportController {
 	@RequestMapping("/showMainScreen")
 	public String showAllDestenation(Model model, HttpServletRequest request) {
 		try {
+			System.out.println(service.getTraveler());
 			List<String> destenations = service.getDestinations();
 			model.addAttribute("destenations", destenations);
 		}catch (Exception e) {//user didnt select flight
@@ -38,7 +39,7 @@ public class AirportController {
 	public String showFlightsToDestination(Model model, HttpServletRequest request) {
 
 		String flightName = request.getParameter("chosenFlight");
-		request.getSession().setAttribute("destFlight", flightName);
+		service.setDestination(flightName);
 		try {
 			List<String> dests = service.getDestinations();
 			model.addAttribute("destenations", dests);
@@ -70,15 +71,14 @@ public class AirportController {
 			decision = 4;
 		if (option.equals("Log out"))
 			decision = 0;
-		User user = (User) request.getSession().getAttribute("user");
 		if(decision == 3 || decision == 4)
 		{
-			return actions(decision,user,0,model);// 0 for invalid id
+			return actions(decision,0,model);// 0 for invalid id
 		}
 		if(id == null)
 		{
 			try {
-				List<Flight> dests = service.showFlightsToDestinations((String)request.getSession().getAttribute("destFlight"));
+				List<Flight> dests = service.showFlightsToDestinations(service.getDestination());
 				model.addAttribute("flightDestenations", dests);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -87,18 +87,17 @@ public class AirportController {
 			model.addAttribute("flightNfound1", "please select a flight for this action");
 			return "dest_flights";
 		}
-		return actions(decision, user, Integer.parseInt(id), model);
+		return actions(decision, Integer.parseInt(id), model);
 	}
 
-	public String actions(int decision, User user, int destId, Model model) {
-		// Traveler(Integer.parseInt(user.getPassword()),user.getUsername());
-		Traveler t = new Traveler(1, "1");
+	public String actions(int decision, int destId, Model model) {
+		Traveler t = service.getTraveler();
 		switch (decision) {
 		case 1:
 			try {
 				service.addTravelerToFlight(destId, t);
-				// picture of destination
 				model.addAttribute("addFlight",service.get(destId));
+				model.addAttribute("destFlight",service.getDestination());
 			} catch (FullFlightException ffe) {
 				model.addAttribute("exception", ffe.getMessage());
 				decision = 5;
@@ -116,7 +115,6 @@ public class AirportController {
 
 			try {
 				service.removeTravelerFromFlight(destId, t);
-				// picture of destination with disappointed message
 				model.addAttribute("removeFlight",service.get(destId));
 			} catch (TravelerNotFoundException tnfe) {
 				model.addAttribute("exception", tnfe.getMessage());
