@@ -3,16 +3,11 @@ package airport.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import airport.dal.FileDao;
-import airport.entities.Airport;
 import airport.entities.Flight;
-import airport.entities.Plane;
 import airport.entities.Traveler;
 import airport.exceptions.FlightAlreadyExistException;
 import airport.exceptions.FlightNotFoundException;
@@ -26,9 +21,12 @@ import airport.exceptions.TravelerNotFoundException;
 public class TravelerService {
 	@Autowired
 	private FileDao dependency;
-	private int maxTravelers = 30;
-    private int maxFlights = 30;
-    private int maxDestinations = 10;
+	private Traveler traveler;
+	private String destination;
+	
+	private final int maxTravelers = 30;
+    private final int maxFlights = 30;
+    private final int maxDestinations = 10;
 	
 	public List<Flight> getAll() throws Exception {
 		/*Flight f1 = new Flight(1, 13, 22, new Plane("707",35), "Japan");
@@ -91,34 +89,33 @@ public class TravelerService {
 		throw new FlightNotFoundException("flight: with id:" + flightId + "could not found");
 	}
 	public void addTravelerToFlight(int flightId,Traveler traveler) throws Exception {
-		//update flight
-		for(Flight flight : dependency.getAll())
-			if(flight.getId() == flightId) {
-				if (flight.getTravelers().size() == maxTravelers) {
-					throw new FullFlightException("cannot add traveler:" + traveler +" flight is full");
-				}
-				if(flight.getTravelers().contains(traveler))
-					throw new TravelerAlreadyExistsException("traveler:" + traveler + " already exist in flight");
-				
-				flight.addTraveler(traveler);
-				dependency.update(flight);
-				System.out.println("traveler added");
-				return;
-			}
-		throw new FlightNotFoundException("flight: with id:" + flightId + "could not found");
+		if(traveler == null)
+			throw new TravelerNotFoundException("traveler does not exist in system!");
+		Traveler t = dependency.getTraveler(traveler.getFullName());
+		if(t.getFlight() != null)
+			throw new TravelerAlreadyExistsException("traveler:" + t + " has already register to a flight");
+		Flight flight = dependency.get(flightId);
+		if(flight == null)
+			throw new FlightNotFoundException("flight: with id:" + flightId + "could not found");
+		if (flight.getTravelers().size() == maxTravelers) {
+			throw new FullFlightException("cannot add traveler:" + t +" flight is full");
+		}
+		if(flight.getTravelers().contains(t))
+			throw new TravelerAlreadyExistsException("traveler:" + t + " already exist in flight");
+		dependency.addTravelerToFlight(flight.getId(),t);
+		System.out.println("traveler added");
 	}
 	public void removeTravelerFromFlight(int flightId,Traveler traveler) throws Exception {
-		for(Flight flight : dependency.getAll())
-			if(flight.getId() == flightId) {
-				if (flight.getTravelers().size() == 0 || !flight.removeTraveler(traveler)) {
-					throw new TravelerNotFoundException("could not found traveler" + traveler + " in flight");
-				} 
-				
-				dependency.update(flight);
-				System.out.println("traveler removed");
-				return;
-			}
-		throw new FlightNotFoundException("flight: with id:" + flightId + "could not found");
+		if(traveler == null)
+			throw new TravelerNotFoundException("traveler does not exist in system!");
+		Traveler t = dependency.getTraveler(traveler.getFullName());
+		Flight flight = dependency.get(flightId);
+		if(flight == null)
+			throw new FlightNotFoundException("flight: with id:" + flightId + " could not be found");
+		if (flight.getTravelers().size() == 0) 
+			throw new TravelerNotFoundException("could not found traveler" + t + " in flight");
+		dependency.removeTravelerFromFlight(flight.getId(),t);
+		System.out.println("traveler removed");
 	}
 	
 	
@@ -147,56 +144,10 @@ public class TravelerService {
 		System.out.println(printFlights);
 		return flights;	
 	}
-	
-	@PreDestroy
-	@PostConstruct
-	public void containerStartUp()  throws Exception{
-		getAll();
-		/*Flight f1 = new Flight(1, 13, 22, new Plane("707",35), "Japan");
-		dependency.save(f1);
-		Flight f2 = new Flight(2, 20, 16, new Plane("747",30), "Japan");
-		dependency.save(f2);
-		Flight f3 = new Flight(3, 13, 20, new Plane("757",28), "New York");
-		dependency.save(f3);
-		Flight f4 = new Flight(4, 20, 22, new Plane("737",30), "Paris");
-		dependency.save(f4);
-		Flight f5 = new Flight(5, 21, 23, new Plane("727",22), "New York");
-		dependency.save(f5);
-		Flight f6 = new Flight(6, 9, 16, new Plane("717",30), "Paris");
-		dependency.save(f6);*/
-		/*dependency.delete(1);
-		dependency.delete(2);
-		dependency.delete(3);
-		dependency.delete(4);
-		dependency.delete(5);
-		dependency.delete(6);*/
-		System.out.println(Airport.getInstance());
-	}
 
-	public int getMaxTravelers() {
-		return maxTravelers;
-	}
-
-	public void setMaxTravelers(int maxTravelers) {
-		this.maxTravelers = maxTravelers;
-	}
-
-	public int getMaxFlights() {
-		return maxFlights;
-	}
-
-	public void setMaxFlights(int maxFlights) {
-		this.maxFlights = maxFlights;
-	}
-	
-	public int getMaxDestinations() {
-		return maxDestinations;
-	}
-
-	public void setMaxDestinations(int maxDestinations) {
-		this.maxDestinations = maxDestinations;
-	}
 	public List<Flight> getTravelerFlights(Traveler traveler,int destId) throws Exception{
+		if(traveler == null)
+			throw new TravelerNotFoundException("traveler does not exist in system!");
 		ArrayList<Flight> flights = new ArrayList<Flight>();
 		for(Flight flight : dependency.getAll()) {
 			if(flight.getId() == destId && flight.getTravelers().contains(traveler))
@@ -206,4 +157,34 @@ public class TravelerService {
 			throw new TravelerNotFoundException("could not found traveler" + traveler + " in with id flights to " + destId + "!");
 		return flights;
 	}
+	
+	public Traveler findTraveler(String name) throws Exception
+	{
+		return dependency.getTraveler(name);
+	}
+	
+	public void saveTraveler(Traveler traveler) throws Exception
+	{
+		dependency.saveTraveler(traveler);
+	}
+	
+	
+	
+	
+	public Traveler getTraveler() {
+		return traveler;
+	}
+
+	public void setTraveler(Traveler traveler) {
+		this.traveler = traveler;
+	}
+
+	public String getDestination() {
+		return destination;
+	}
+
+	public void setDestination(String destination) {
+		this.destination = destination;
+	}
+
 }

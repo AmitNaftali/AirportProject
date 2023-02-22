@@ -73,17 +73,19 @@ input[type="submit"]:hover{
 
 
 
-    <form:form action="processLogin" modelAttribute="user">
-    <p> Login page: </p>
+    <form:form action="processRegister" modelAttribute="user">
+    <p> Register page: </p>
+    
         <label>User Name:</label>
         <form:input path="fullName" />
 
         <p class="message">${message}</p>
 
-        <input type="submit" value="Log In" />
+        <input type="submit" value="Sign Up" />
     </form:form>
-    <form:form action="register">
-    	<input type="submit" value="Sign Up" />
+    
+    <form:form action="/AirportWebProject">
+    	<input type="submit" value="Log In" />
     </form:form>
 </body>
 </html>

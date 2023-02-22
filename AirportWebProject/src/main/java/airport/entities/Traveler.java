@@ -1,15 +1,47 @@
 package airport.entities;
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+
+@Entity
+@Table(name = "travelers")
 public class Traveler implements Comparable<Traveler>,Serializable{
-	private int passportId; // id
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name = "traveler_id")
+	private int passportId;
+	
+	@Column(name = "fullName")
 	private String fullName;
 	
-	public Traveler(int passportId, String fullName) {
-		this.passportId = passportId;
+	@ManyToOne(cascade = { CascadeType.ALL })
+	@JoinColumn(name = "flight_id")
+	private Flight flight;
+	
+
+	public Traveler() {}
+	
+	public Traveler(String fullName) {
 		this.fullName = fullName;
 	}
 
+	public Flight getFlight() {
+		return flight;
+	}
+	public void setFlight(Flight flight) {
+		this.flight = flight;
+	}
+	
 	public int getPassportId() {
 		return passportId;
 	}

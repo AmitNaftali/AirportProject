@@ -1,33 +1,49 @@
 package airport.entities;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+
+@Entity
+@Table(name = "flights")
 public class Flight implements Comparable<Flight>, Serializable {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name = "flight_id")
 	private int id; // id
-	private ArrayList<Traveler> travelers;
+	
+	@OneToMany(fetch=FetchType.LAZY,mappedBy = "flight", // Refers to flight in the traveler class
+	cascade = { CascadeType.ALL })// All types but remove
+	private List<Traveler> travelers;
+	
+	@Column(name = "departureTime")
 	private double departureTime;
+	
+	@Column(name = "landingTime")
 	private double landingTime;
-	private Plane plane;
+	
+	@Column(name = "destination")
 	private String destination;
 	
 	public Flight() {}
-	public Flight(int id,double departureTime, double landingTime, Plane p, String destination) {
-		this.id = id;
+	public Flight(double departureTime, double landingTime, String destination) {
 		this.departureTime = departureTime;
 		this.landingTime = landingTime;
-		this.plane = p;
 		this.travelers = new ArrayList<Traveler>();
 		this.destination = destination;
 	}
 	
-	public Plane getPlane() {
-		return plane;
-	}
-
-	public void setPlane(Plane plane) {
-		this.plane = plane;
-	}
-
 	public String getDestination() {
 		return destination;
 	}
@@ -54,7 +70,7 @@ public class Flight implements Comparable<Flight>, Serializable {
 	public double getLandingTime() {
 		return landingTime;
 	}
-	public ArrayList<Traveler> getTravelers() {
+	public List<Traveler> getTravelers() {
 		return travelers;
 	}
 	public void setLandingTime(double landingTime) {
@@ -62,13 +78,16 @@ public class Flight implements Comparable<Flight>, Serializable {
 	}
 
 	public boolean addTraveler(Traveler traveler){
-		travelers.add(traveler);
-		return true;
+		boolean r = travelers.add(traveler);
+		traveler.setFlight(this);
+		return r;
 
 	}
 
 	public boolean removeTraveler(Traveler traveler) {
-		return travelers.remove(traveler);
+		boolean r = travelers.remove(traveler);
+		traveler.setFlight(null);
+		return r;
 	}
 	
 
