@@ -1,4 +1,4 @@
-package airport.cli;
+package airport.controllers;
 
 import java.util.List;
 
@@ -129,8 +129,8 @@ public class AirportController {
 		case 3:
 
 			try {
-				List<Flight> travelerFlights = service.getTravelerFlights(t, destId);
-				model.addAttribute("travelerFlights",travelerFlights);
+				Flight travelerFlight = service.getTravelerFlight(t, destId);
+				model.addAttribute("travelerFlight",travelerFlight);
 			} catch (TravelerNotFoundException tnfe) {
 				model.addAttribute("exception", tnfe.getMessage());
 				decision = 5;

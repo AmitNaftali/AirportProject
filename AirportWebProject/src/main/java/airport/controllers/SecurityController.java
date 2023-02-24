@@ -1,4 +1,4 @@
-package airport.cli;
+package airport.controllers;
 
 import javax.servlet.http.HttpServletRequest;
 

@@ -138,7 +138,7 @@ input[type="submit"]:hover{
 		<c:when test="${action=='3'}">
 			<form:form action="showMainScreen">
 
-				<p>all of your flights:</p>
+				<p>your flight:</p>
 				<table style="width: 1500" align="center">
 					<tr>
 						<th>flight</th>
@@ -146,18 +146,16 @@ input[type="submit"]:hover{
 						<th>landingTime</th>
 						<th>travelers</th>
 					</tr>
-					<c:forEach items="${travelerFlights}" var="destenation">
 						<tr>
-							<td>${destenation.id}</td>
-							<td>${destenation.departureTime}</td>
-							<td>${destenation.landingTime}</td>
-							<td><c:forEach items="${destenation.travelers}"
+							<td>${travelerFlight.id}</td>
+							<td>${travelerFlight.departureTime}</td>
+							<td>${travelerFlight.landingTime}</td>
+							<td><c:forEach items="${travelerFlight.travelers}"
 									var="traveler">
 									<p>id: ${traveler.passportId}</p>
 									<p>name: ${traveler.fullName}</p>
 								</c:forEach></td>
 						</tr>
-					</c:forEach>
 				</table>
 				<input type="submit" value="Ok" />
 			</form:form>
