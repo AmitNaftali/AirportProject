@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 @Table(name = "travelers")
@@ -34,7 +36,7 @@ public class Traveler implements Comparable<Traveler>,Serializable{
 	public Traveler(String fullName) {
 		this.fullName = fullName;
 	}
-
+	@JsonIgnore
 	public Flight getFlight() {
 		return flight;
 	}

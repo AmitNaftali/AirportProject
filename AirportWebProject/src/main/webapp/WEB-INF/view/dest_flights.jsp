@@ -99,7 +99,7 @@ input[type="submit"]:hover{
 		<p>${flightNfound1}</p>
 		<input type="submit" name="option" value="Add to flight" />
 		<input type="submit" name="option" value="Remove from flight" />
-		<input type="submit" name="option" value="Show your flights" />
+		<input type="submit" name="option" value="Show your flight" />
 		<input type="submit" name="option" value="Show all flights" />
 		<input type="submit" name="option" value="Log out" />
 	</form:form>

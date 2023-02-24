@@ -63,6 +63,7 @@ input[type="submit"]:hover{
 <body>
     <form:form action="showFlightsToDestination">
     <p>${flightNfound2}</p>
+    <a href="flights">See all flights</a>
         <table style="width: 1000" align="center">
             <tr>
                 <th>destenation</th>

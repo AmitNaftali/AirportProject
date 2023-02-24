@@ -145,17 +145,13 @@ public class TravelerService {
 		return flights;	
 	}
 
-	public List<Flight> getTravelerFlights(Traveler traveler,int destId) throws Exception{
+	public Flight getTravelerFlight(Traveler traveler,int destId) throws Exception{
 		if(traveler == null)
 			throw new TravelerNotFoundException("traveler does not exist in system!");
-		ArrayList<Flight> flights = new ArrayList<Flight>();
-		for(Flight flight : dependency.getAll()) {
-			if(flight.getId() == destId && flight.getTravelers().contains(traveler))
-				flights.add(flight);
-		}
-		if(flights.isEmpty())
-			throw new TravelerNotFoundException("could not found traveler" + traveler + " in with id flights to " + destId + "!");
-		return flights;
+		if(traveler.getFlight() == null)
+			throw new TravelerNotFoundException("traveler could not found in flight!");
+		Flight flight = dependency.get(traveler.getFlight().getId()); // load data
+		return flight;
 	}
 	
 	public Traveler findTraveler(String name) throws Exception
